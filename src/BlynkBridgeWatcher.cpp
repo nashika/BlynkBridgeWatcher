@@ -1,24 +1,30 @@
 #include <Arduino.h>
 #include "BlynkBridgeWatcher.h"
 
-BlynkBridgeWatcher::BlynkBridgeWatcher(const char* name) {
+BlynkBridgeWatcher::BlynkBridgeWatcher(int vPin, const char* name) : _bridge(vPin) {
   _name = name;
 }
 
-char* BlynkBridgeWatcher::pong() {
+void BlynkBridgeWatcher::connect(const char* token) {
+  while (Blynk.connect() == false) {}
+  _bridge.setAuthToken(token);
+}
+
+void BlynkBridgeWatcher::recv(const char* command) {
+  while (Blynk.connect() == false) {}
   char* msg = new char[MAX_LENGTH];
   snprintf(msg, MAX_LENGTH, "%s,$pong", _name);
-  return msg;
+  _bridge.virtualWrite(0, msg);
 }
 
-char* BlynkBridgeWatcher::message(const char* command, int argument) {
+void BlynkBridgeWatcher::send(const char* command, int argument) {
   char* msg = new char[MAX_LENGTH];
   snprintf(msg, MAX_LENGTH, "%d", argument);
-  message(command, msg);
+  send(command, msg);
 }
 
-char* BlynkBridgeWatcher::message(const char* command, const char* argument) {
+void BlynkBridgeWatcher::send(const char* command, const char* argument) {
   char* msg = new char[MAX_LENGTH];
   snprintf(msg, MAX_LENGTH, "%s,%s,%s", _name, command, argument);
-  return msg;
+  _bridge.virtualWrite(0, msg);
 }
