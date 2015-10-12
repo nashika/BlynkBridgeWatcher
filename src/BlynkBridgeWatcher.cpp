@@ -13,31 +13,31 @@ void BlynkBridgeWatcher::connect(const char* token) {
 void BlynkBridgeWatcher::recv(const char* input) {
   char* buff = (char*)input;
   char* msg = new char[MAX_LENGTH];
-  char* command, *param1, *param2, *param3;
-  command = strtok(buff, ",");
-  param1 = strtok(NULL, ",");
-  param2 = strtok(NULL, ",");
-  param3 = strtok(NULL, ",");
+  char *callbackKey, *command, *pin, *param;
+  callbackKey = strtok(buff, ",");
+  command = strtok(NULL, ",");
+  pin = strtok(NULL, ",");
+  param = strtok(NULL, ",");
   if (strcmp(command, "pi") == 0) {
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s", _name, param2);
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s", _name, callbackKey);
   } else if (strcmp(command, "dr") == 0) {
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, param2, digitalRead(atoi(param1)));
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, callbackKey, digitalRead(atoi(pin)));
   } else if (strcmp(command, "ar") == 0) {
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, param2, analogRead(atoi(param1)));
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, callbackKey, analogRead(atoi(pin)));
   } else if (strcmp(command, "vr") == 0) {
-    //snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, param2, Blynk.virtualRead(atoi(param1)));
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s", _name, param2);
+    //snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, callbackKey, Blynk.virtualRead(atoi(pin)));
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s", _name, callbackKey);
   } else if (strcmp(command, "dw") == 0) {
-    digitalWrite(atoi(param1), atoi(param3));
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, param2);
+    digitalWrite(atoi(pin), atoi(param));
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, callbackKey);
   } else if (strcmp(command, "aw") == 0) {
-    analogWrite(atoi(param1), atoi(param3));
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, param2);
+    analogWrite(atoi(pin), atoi(param));
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, callbackKey);
   } else if (strcmp(command, "vw") == 0) {
-    Blynk.virtualWrite(atoi(param1), atoi(param3));
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, param2);
+    Blynk.virtualWrite(atoi(pin), atoi(param));
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, callbackKey);
   } else {
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s",-1, _name, param2);
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s",-1, _name, callbackKey);
   }
   _bridge.virtualWrite(0, msg);
 }
