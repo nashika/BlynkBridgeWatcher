@@ -27,15 +27,6 @@ void BlynkBridgeWatcher::recv(const char* input) {
   } else if (strcmp(command, "vr") == 0) {
     //snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, callbackKey, Blynk.virtualRead(atoi(pin)));
     snprintf(msg, MAX_LENGTH, "%s,$r,%s", _name, callbackKey);
-  } else if (strcmp(command, "dw") == 0) {
-    digitalWrite(atoi(pin), atoi(param));
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, callbackKey);
-  } else if (strcmp(command, "aw") == 0) {
-    analogWrite(atoi(pin), atoi(param));
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, callbackKey);
-  } else if (strcmp(command, "vw") == 0) {
-    Blynk.virtualWrite(atoi(pin), atoi(param));
-    snprintf(msg, MAX_LENGTH, "%s,$r,%s,1", _name, callbackKey);
   } else {
     snprintf(msg, MAX_LENGTH, "%s,$r,%s",-1, _name, callbackKey);
   }
