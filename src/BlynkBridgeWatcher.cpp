@@ -18,7 +18,9 @@ void BlynkBridgeWatcher::recv(const char* input) {
   command = strtok(NULL, ",");
   pin = strtok(NULL, ",");
   param = strtok(NULL, ",");
-  if (strcmp(command, "pi") == 0) {
+  if (strcmp(command, "st") == 0) {
+    snprintf(msg, MAX_LENGTH, "%s,$r,%s", _name, callbackKey);
+  } else if (strcmp(command, "pi") == 0) {
     snprintf(msg, MAX_LENGTH, "%s,$r,%s", _name, callbackKey);
   } else if (strcmp(command, "dr") == 0) {
     snprintf(msg, MAX_LENGTH, "%s,$r,%s,%d", _name, callbackKey, digitalRead(atoi(pin)));
