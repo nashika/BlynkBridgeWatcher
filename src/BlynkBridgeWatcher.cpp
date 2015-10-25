@@ -11,7 +11,8 @@ void BlynkBridgeWatcher::connect(const char* token) {
 }
 
 void BlynkBridgeWatcher::recv(const char* input) {
-  char* buff = (char*)input;
+  char* buff = new char[strlen(input) + 1];
+  strcpy(buff, input);
   char* msg = new char[MAX_LENGTH];
   char *callbackKey, *command, *pin, *param;
   callbackKey = strtok(buff, ",");
@@ -33,6 +34,8 @@ void BlynkBridgeWatcher::recv(const char* input) {
     snprintf(msg, MAX_LENGTH, "%s,$r,%s",-1, _name, callbackKey);
   }
   _bridge.virtualWrite(0, msg);
+  delete [] buff;
+  delete [] msg;
 }
 
 void BlynkBridgeWatcher::send(const char* command, int argument) {
