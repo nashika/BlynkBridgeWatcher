@@ -42,10 +42,12 @@ void BlynkBridgeWatcher::send(const char* command, int argument) {
   char* msg = new char[MAX_LENGTH];
   snprintf(msg, MAX_LENGTH, "%d", argument);
   send(command, msg);
+  delete [] msg;
 }
 
 void BlynkBridgeWatcher::send(const char* command, const char* argument) {
   char* msg = new char[MAX_LENGTH];
   snprintf(msg, MAX_LENGTH, "%s,%s,%s", _name, command, argument);
   _bridge.virtualWrite(0, msg);
+  delete [] msg;
 }
