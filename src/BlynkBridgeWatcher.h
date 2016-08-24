@@ -45,10 +45,17 @@ public:
 		delete [] msg;
 	}
 	
+	void send(const char* command) {
+		char* msg = new char[MAX_LENGTH];
+		snprintf(msg, MAX_LENGTH, "%s,%s", _name, command);
+		_bridge.virtualWrite(0, msg);
+		delete [] msg;
+	}
+	
 	void send(const char* command, int argument) {
 		char* msg = new char[MAX_LENGTH];
-		snprintf(msg, MAX_LENGTH, "%d", argument);
-		send(command, msg);
+		snprintf(msg, MAX_LENGTH, "%s,%s,%d", _name, command, argument);
+		_bridge.virtualWrite(0, msg);
 		delete [] msg;
 	}
 	
