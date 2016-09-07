@@ -8,11 +8,7 @@ SoftwareSerial DebugSerial(2, 3); // RX, TX
 #define TOKEN "this board token"
 #define WATCHER_TOKEN "watcher board token"
 
-#define BRIDGE_INPUT_VPIN V0
-#define BRIDGE_OUTPUT_VPIN V1
-#define BRIGE_NAME "BR01"
-
-BlynkBridgeWatcher blynkBridgeWatcher(BRIDGE_OUTPUT_VPIN, BRIGE_NAME);
+BlynkBridgeWatcher blynkBridgeWatcher(V1, WATCHER_TOKEN);
 
 void setup() {
   // Debug console
@@ -21,13 +17,18 @@ void setup() {
   // Blynk will work through Serial
   Serial.begin(9600);
   Blynk.begin(TOKEN, Serial);
-  blynkBridgeWatcher.connect(WATCHER_TOKEN);
 }
 
-BLYNK_WRITE(BRIDGE_INPUT_VPIN) {
+BLYNK_WRITE(V0) {
   blynkBridgeWatcher.recv(param.asStr());
+}
+
+BLYNK_WRITE(V10) {
+  blynkBridgeWatcher.send("_id_", param.asInt());
 }
 
 void loop() {
   Blynk.run();
+  blynkBridgeWatcher.run();
 }
+

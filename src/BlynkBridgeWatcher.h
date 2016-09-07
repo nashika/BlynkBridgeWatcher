@@ -10,11 +10,8 @@ class BlynkBridgeWatcher {
 public:
   BlynkBridgeWatcher(int vPin, const char* token) : _bridge(vPin) {
     _token = token;
-  }
-
-  void connect() {
-    while (Blynk.connect() == false) {}
-    _bridge.setAuthToken(_token);
+    _timeout = 90000;
+    _lasttime = 0;
   }
 
   void recv(const char* input) {
@@ -39,6 +36,7 @@ public:
       snprintf(msg, MAX_LENGTH, "%s",-1, callbackKey);
     }
     _bridge.virtualWrite(0, msg);
+    _lasttime = millis();
     delete [] buff;
     delete [] msg;
   }
@@ -70,11 +68,21 @@ public:
     _bridge.virtualWrite(0, msg);
     delete [] msg;
   }
+  
+  void run() {
+    if (millis() - _lasttime > _timeout) {
+      while (Blynk.connect() == false) {}
+      _bridge.setAuthToken(_token);
+      _lasttime = millis();
+    }
+  }
 
 private:
   static const int MAX_LENGTH = 32;
   WidgetBridge _bridge;
   const char* _token;
+  uint32_t _timeout;
+  unsigned long _lasttime;
 };
 
 #endif
