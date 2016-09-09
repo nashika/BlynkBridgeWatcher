@@ -70,7 +70,6 @@ public:
 
   void run() {
     if (_lasttime == 0 || millis() - _lasttime > _timeout) {
-      while (Blynk.connect() == false) {}
       _bridge.setAuthToken(_token);
       _lasttime = millis();
     }
