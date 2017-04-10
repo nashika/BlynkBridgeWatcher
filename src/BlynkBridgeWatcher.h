@@ -32,6 +32,15 @@ public:
     } else if (strcmp(command, "vr") == 0) {
       //snprintf(msg, MAX_LENGTH, "%s,%d", callbackKey, Blynk.virtualRead(atoi(pin)));
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
+    } else if (strcmp(command, "dw") == 0) {
+      digitalWrite(atoi(pin), atoi(param));
+      snprintf(msg, MAX_LENGTH, "%s", callbackKey);
+    } else if (strcmp(command, "aw") == 0) {
+      analogWrite(atoi(pin), atoi(param));
+      snprintf(msg, MAX_LENGTH, "%s", callbackKey);
+    } else if (strcmp(command, "vw") == 0) {
+      Blynk.virtualWrite(atoi(pin), atoi(param));
+      snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else {
       snprintf(msg, MAX_LENGTH, "%s",-1, callbackKey);
     }
