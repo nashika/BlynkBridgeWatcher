@@ -41,8 +41,22 @@ public:
     } else if (strcmp(command, "vw") == 0) {
       Blynk.virtualWrite(atoi(pin), atoi(param));
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
+    } else if (strcmp(command, "co") == 0) {
+      snprintf(msg, MAX_LENGTH, "%s", callbackKey);
+    } else if (strcmp(command, "pm") == 0) {
+      int mode = atoi(param);
+      snprintf(msg, MAX_LENGTH, "%s", callbackKey);
+      if (mode == 0 || mode == 3) {
+        pinMode(atoi(pin), INPUT);
+      } else if (mode == 1) {
+        pinMode(atoi(pin), OUTPUT);
+      } else if (mode == 2 || mode == 4) {
+        pinMode(atoi(pin), INPUT_PULLUP);
+      } else {
+        snprintf(msg, MAX_LENGTH, "%s,%s,%s", callbackKey, "er", "INVALID PIN MODE");
+      }
     } else {
-      snprintf(msg, MAX_LENGTH, "%s",-1, callbackKey);
+      snprintf(msg, MAX_LENGTH, "%s,%s,%s", callbackKey, "er", "INVALID COMMAND");
     }
     _bridge.virtualWrite(0, msg);
     delete [] buff;
