@@ -90,7 +90,7 @@ public:
   }
 
   void run() {
-    if (_lasttime == 0 || millis() - _lasttime > _timeout) {
+    if (_lasttime == 0 || millis() - _lasttime > _timeout || millis() < _lasttime) {
       _bridge.setAuthToken(_token);
       _lasttime = millis();
     }
