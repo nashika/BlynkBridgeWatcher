@@ -18,40 +18,38 @@ public:
     char* buff = new char[strlen(input) + 1];
     strcpy(buff, input);
     char* msg = new char[MAX_LENGTH];
-    char *callbackKey, *command, *pin, *param;
-    callbackKey = strtok(buff, ",");
-    command = strtok(NULL, ",");
-    pin = strtok(NULL, ",");
-    param = strtok(NULL, ",");
+    char* callbackKey = strtok(buff, ",");
+    char* command = strtok(NULL, ",");
+    int pin = atoi(strtok(NULL, ","));
+    int param = atoi(strtok(NULL, ","));
     if (strcmp(command, "pi") == 0) {
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else if (strcmp(command, "dr") == 0) {
-      snprintf(msg, MAX_LENGTH, "%s,%d", callbackKey, digitalRead(atoi(pin)));
+      snprintf(msg, MAX_LENGTH, "%s,%d", callbackKey, digitalRead(pin));
     } else if (strcmp(command, "ar") == 0) {
-      snprintf(msg, MAX_LENGTH, "%s,%d", callbackKey, analogRead(atoi(pin)));
+      snprintf(msg, MAX_LENGTH, "%s,%d", callbackKey, analogRead(pin));
     } else if (strcmp(command, "vr") == 0) {
-      //snprintf(msg, MAX_LENGTH, "%s,%d", callbackKey, Blynk.virtualRead(atoi(pin)));
+      //snprintf(msg, MAX_LENGTH, "%s,%d", callbackKey, Blynk.virtualRead(pin));
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else if (strcmp(command, "dw") == 0) {
-      digitalWrite(atoi(pin), atoi(param));
+      digitalWrite(pin, param);
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else if (strcmp(command, "aw") == 0) {
-      analogWrite(atoi(pin), atoi(param));
+      analogWrite(pin, param);
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else if (strcmp(command, "vw") == 0) {
-      Blynk.virtualWrite(atoi(pin), atoi(param));
+      Blynk.virtualWrite(pin, param);
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else if (strcmp(command, "co") == 0) {
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else if (strcmp(command, "pm") == 0) {
-      int mode = atoi(param);
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
-      if (mode == 0 || mode == 3) {
-        pinMode(atoi(pin), INPUT);
-      } else if (mode == 1) {
-        pinMode(atoi(pin), OUTPUT);
-      } else if (mode == 2 || mode == 4) {
-        pinMode(atoi(pin), INPUT_PULLUP);
+      if (param == 0 || param == 3) {
+        pinMode(pin, INPUT);
+      } else if (param == 1) {
+        pinMode(pin, OUTPUT);
+      } else if (param == 2 || param == 4) {
+        pinMode(pin, INPUT_PULLUP);
       } else {
         snprintf(msg, MAX_LENGTH, "%s,%s,%s", callbackKey, "er", "INVALID PIN MODE");
       }
