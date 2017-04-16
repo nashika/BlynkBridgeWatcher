@@ -44,14 +44,17 @@ public:
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
     } else if (strcmp(command, "pm") == 0) {
       snprintf(msg, MAX_LENGTH, "%s", callbackKey);
-      if (param == 0 || param == 3) {
-        pinMode(pin, INPUT);
-      } else if (param == 1) {
+      if (param & 0b1) {
         pinMode(pin, OUTPUT);
-      } else if (param == 2 || param == 4) {
-        pinMode(pin, INPUT_PULLUP);
       } else {
-        snprintf(msg, MAX_LENGTH, "%s,%s,%s", callbackKey, "er", "INVALID PIN MODE");
+        if (param & 0b10) {
+          pinMode(pin, INPUT_PULLUP);
+        } else {
+          pinMode(pin, INPUT);
+        }
+        if (param & 0b100) {
+          
+        }
       }
     } else {
       snprintf(msg, MAX_LENGTH, "%s,%s,%s", callbackKey, "er", "INVALID COMMAND");
